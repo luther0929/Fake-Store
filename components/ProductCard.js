@@ -3,6 +3,7 @@ import { commonStyles } from "../styles/common";
 import { colors } from "../styles/colors";
 import { spacing } from "../styles/spacing";
 import CustomImage from './CustomImage';
+import { getFirstThreeWords } from "../utils/stringUtils";
 
 export default function ProductCard({products, onPress}) {
 
@@ -15,9 +16,12 @@ export default function ProductCard({products, onPress}) {
                 />
             </View>
             <View style={styles.textContainer}>
-                <Text style={styles.text}>{products.title}</Text>
+                <Text style={[styles.text, {fontWeight: 'bold', fontSize: 16}]}>{getFirstThreeWords(products.title)}</Text>
+            <View style={{gap: 5}}>
                 <Text style={styles.text}>Price: ${products.price}</Text>
                 <Text style={styles.text}>Rating: {products.rating.rate}</Text>
+            </View>
+                
             </View>
         </Pressable>
     );
@@ -33,10 +37,9 @@ const styles = StyleSheet.create({
         borderColor: colors.accent
     },
     textContainer: {
-        paddingVertical: 10,
-        justifyContent: 'space-around',
-        width: '40%',
-        gap: spacing.medium,
+        justifyContent: 'space-between',
+        width: '35%',
+        gap: 40,
     },
     text: {
         flexWrap: 'wrap',

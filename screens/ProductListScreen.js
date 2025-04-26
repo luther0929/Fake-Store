@@ -21,12 +21,13 @@ export default function ProductListScreen() {
         return(
             <LoadingIndicator
                 size={80}
+                backgroundColor={colors.primary}
             />
         );
     }
 
     return(
-        <ScrollView style={commonStyles.container}> 
+        <ScrollView style={[commonStyles.container, {paddingVertical: '5%'}]}> 
             <View style={commonStyles.list}>
                 {filteredProducts.map((filteredProduct) => {
                     return <ProductCard

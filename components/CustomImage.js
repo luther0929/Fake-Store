@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Image, ActivityIndicator, View } from 'react-native';
+import { Image, View } from 'react-native';
 import LoadingIndicator from './LoadingIndicator';
 
 export default function CustomImage({source, size = 200}) {
@@ -28,7 +28,7 @@ export default function CustomImage({source, size = 200}) {
             />
 
             {isLoading && (
-                <LoadingIndicator size={80}  />
+                <LoadingIndicator size={40}  />
             )}
         </View>    
     );
