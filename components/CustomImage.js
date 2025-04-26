@@ -14,9 +14,7 @@ export default function CustomImage({source, size = 200}) {
         setIsError(true)
         setIsLoading(false);
     };
-
     
-
     return(
         <View>
             <Image 
