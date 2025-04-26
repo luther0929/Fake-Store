@@ -1,49 +1,45 @@
 import { View, Text, StyleSheet, Image, Pressable } from "react-native";
+import { commonStyles } from "../styles/common";
+import { colors } from "../styles/colors";
+import { spacing } from "../styles/spacing";
+import CustomImage from './CustomImage';
 
 export default function ProductCard({products, onPress}) {
 
     return(
-        <Pressable style={styles.container} onPress={onPress}>
-            <View style={styles.imageContainer}>
-                <Image style={styles.image} source={{uri: products.image}} resizeMode="contain"/>
+        <Pressable style={[commonStyles.card, { height: 190 }]} onPress={onPress}>
+            <View style={styles.imageContainer} >
+                <CustomImage
+                    source={{uri: products.image}}
+                    size = {120}
+                />
             </View>
             <View style={styles.textContainer}>
-                <Text style={styles.title}>{products.title}</Text>
-                <Text>Price: ${products.price}</Text>
-                <Text>Rating: {products.rating.rate}</Text>
+                <Text style={styles.text}>{products.title}</Text>
+                <Text style={styles.text}>Price: ${products.price}</Text>
+                <Text style={styles.text}>Rating: {products.rating.rate}</Text>
             </View>
         </Pressable>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        width: '100%',
-        margin: 10,
-        borderRadius: 16,
-        backgroundColor: '#e6d2b9',
-        justifyContent: 'space-around',
-        borderWidth: 1
-    },
     imageContainer: {
-        margin: 12,
-        padding: 10,
-        borderWidth: 1,
-        borderRadius: 16,
-        backgroundColor: '#fff',
-    },
-    image: {
-        width: 150,
-        height: 150,
+        margin: spacing.small,
+        padding: spacing.small,
+        borderWidth: spacing.border,
+        borderRadius: spacing.medium,
+        backgroundColor: 'white',
+        borderColor: colors.accent
     },
     textContainer: {
         paddingVertical: 10,
         justifyContent: 'space-around',
         width: '40%',
-        gap: 10,
+        gap: spacing.medium,
     },
-    title: {
+    text: {
         flexWrap: 'wrap',
+        color: '#fff'
     }
 })

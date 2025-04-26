@@ -1,7 +1,10 @@
-import useProducts from '../hooks/useProducts'
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from "react-native";
-import ProductCard from '../components/ProductCard';
+import { View, ScrollView, ActivityIndicator } from "react-native";
 import { useRoute, useNavigation } from '@react-navigation/native';
+import { commonStyles } from '../styles/common';
+import useProducts from '../hooks/useProducts'
+import { colors } from "../styles/colors";
+import ProductCard from '../components/ProductCard';
+import LoadingIndicator from "../components/LoadingIndicator";
 
 export default function ProductListScreen() {
     const { products, isLoading, error } = useProducts();
@@ -14,9 +17,17 @@ export default function ProductListScreen() {
         navigation.navigate('ProductScreen', {product});
     }
 
+    if(isLoading) {
+        return(
+            <LoadingIndicator
+                size={80}
+            />
+        );
+    }
+
     return(
-        <ScrollView style={styles.container}> 
-            <View style={styles.list}>
+        <ScrollView style={commonStyles.container}> 
+            <View style={commonStyles.list}>
                 {filteredProducts.map((filteredProduct) => {
                     return <ProductCard
                         products={filteredProduct}
@@ -28,20 +39,3 @@ export default function ProductListScreen() {
         </ScrollView>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        width: '100%',
-        height: '100%',
-        paddingHorizontal: 16,
-        backgroundColor: '#fff',
-    },
-    list: {
-        width: '100%',
-        flex: 5,
-        alignItems: 'center',
-        justifyContent: 'center',
-    }
-
-})

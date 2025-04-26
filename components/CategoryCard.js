@@ -1,20 +1,24 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { capitalizeEachWord } from "../utils/stringUtils";
+import { commonStyles } from "../styles/common";
+import { colors } from "../styles/colors";
+import { spacing } from "../styles/spacing";
+import CustomImage from "./CustomImage";
 
 export default function CategoryCard({ name, imageSource, onPress }) {
 
     return(
         <TouchableOpacity
-            style={styles.container}
+            style={commonStyles.card}
             onPress={onPress}
         >
             <View style={styles.textContainer}>
-                <Text style={styles.text}>{name}</Text>
+                <Text style={styles.text}>{capitalizeEachWord(name)}</Text>
             </View>
             <View>
-                <Image
+                <CustomImage
                     source={imageSource}
-                    style={styles.image}
-                    resizeMode="contain"
+                    size = {180}
                 />
             </View>
         </TouchableOpacity>
@@ -22,27 +26,17 @@ export default function CategoryCard({ name, imageSource, onPress }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        height: 130,
-        width: '100%',
-        margin: 10,
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        borderRadius: 16,
-        backgroundColor: '#e6d2b9',
-    },
     textContainer: {
-        marginLeft: 16,
         justifyContent: "center",
-        flex: 1
+        flex: 1,
+        margin: spacing.medium
     },
     text: {
-        color: '#323A45',
+        color: colors.fontTitle,
         fontSize: 20,
     },
     image: {
-        width: 185,
-        height: 185
+        width: 180,
+        height: 180
     }
 });

@@ -5,6 +5,7 @@ import CategoryScreen from './screens/CategoryScreen.js';
 import ProductListScreen from './screens/ProductListScreen.js';
 import ProductScreen from './screens/ProductScreen.js';
 
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {

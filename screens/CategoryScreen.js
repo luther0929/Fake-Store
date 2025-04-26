@@ -1,8 +1,9 @@
-import CategoryCard from '../components/CategoryCard.js';
-import useCategories from '../hooks/useCategories.js';
-import { View, StyleSheet } from 'react-native';
-import categoriesImages from '../assets/images.js';
+import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { commonStyles } from '../styles/common.js';
+import useCategories from '../hooks/useCategories.js';
+import categoriesImages from '../assets/images.js';
+import CategoryCard from '../components/CategoryCard.js';
 
 export default function CategoryScreen() {
     const { categories, isLoading, error } = useCategories();
@@ -11,9 +12,17 @@ export default function CategoryScreen() {
         navigation.navigate('ProductListScreen', {category});
     };
 
+    if(isLoading) {
+        return(
+            <LoadingIndicatorS
+                size={80}
+            />
+        );
+    }
+
     return(
-        <View style={styles.container}>
-            <View style={styles.list}>
+        <View style={commonStyles.container}>
+            <View style={commonStyles.list}>
                 {categories.map((category) => {
                   return <CategoryCard
                       name={category}
@@ -26,20 +35,3 @@ export default function CategoryScreen() {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-    paddingHorizontal: 16,
-    backgroundColor: '#a0aaa7',
-    alignItems: 'center',
-  },
-  list: {
-    width: '100%',
-    flex: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-  }
-});
