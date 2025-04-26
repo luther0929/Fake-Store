@@ -4,5 +4,5 @@ export const colors = {
     accent: 'white',
     fontTitle: '#EAE8E9',
     fontParagraph: 'black',
-    loading: 'red'
+    loading: '#1F423F'
 }

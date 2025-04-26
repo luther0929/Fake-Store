@@ -1,11 +1,13 @@
-import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView} from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { commonStyles } from "../styles/common";
 import { colors } from "../styles/colors";
 import { spacing } from "../styles/spacing";
 import CustomImage from "../components/CustomImage";
+import { Ionicons } from '@expo/vector-icons';
 
 import LoadingIndicator from "../components/LoadingIndicator";
+
 
 export default function ProductScreen() {
     const route = useRoute();
@@ -16,18 +18,19 @@ export default function ProductScreen() {
     }
 
     return(
-        <View style={[commonStyles.container, {paddingHorizontal:0}]}>
+        <View style={[commonStyles.container, {paddingHorizontal:0, backgroundColor: "white"}]}>
             <View style={styles.imageContainer}>
                 <CustomImage
                     source={{uri: product.image}}
                     size={200}
                 />
             </View>
-            <View style={styles.textContainer}>
+            <View style={[styles.textContainer, {borderRadius: 30}]}>
                 <View>
                     <Text style={[styles.text, {fontWeight: 'bold', fontSize: 18}]}>{product.title}</Text>
-                    <View style={{paddingVertical: 10}}>
-                        <Text style={styles.text}>{product.rating.rate}</Text>
+                    <View style={{paddingVertical: 10, flexDirection: 'row', alignItems: 'center', gap: 4}}>
+                    <Ionicons name="star" size={16} color="white" />
+                        <Text style={[styles.text, {fontSize: 16}]}>{product.rating.rate}</Text>
                     </View>
                 </View>
                 <View style={{gap:5, paddingVertical: 25}}>
@@ -35,7 +38,7 @@ export default function ProductScreen() {
                     <Text style={styles.text}>{product.description}</Text>
                 </View>
                 
-                <Text style={[styles.text, {fontSize: 18, paddingTop: 10}]}>Price: ${product.price}</Text>
+                <Text style={[styles.text, {fontSize: 24, paddingTop: 10}]}>${product.price}</Text>
             </View>
             
         </View>

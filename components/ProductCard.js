@@ -4,6 +4,7 @@ import { colors } from "../styles/colors";
 import { spacing } from "../styles/spacing";
 import CustomImage from './CustomImage';
 import { getFirstThreeWords } from "../utils/stringUtils";
+import { Ionicons } from '@expo/vector-icons';
 
 export default function ProductCard({products, onPress}) {
 
@@ -19,7 +20,10 @@ export default function ProductCard({products, onPress}) {
                 <Text style={[styles.text, {fontWeight: 'bold', fontSize: 16}]}>{getFirstThreeWords(products.title)}</Text>
             <View style={{gap: 5}}>
                 <Text style={styles.text}>Price: ${products.price}</Text>
-                <Text style={styles.text}>Rating: {products.rating.rate}</Text>
+                <View style={{flexDirection: 'row', alignItems: 'center', gap: 6}}>
+                    <Ionicons name="star" size={12} color="white" />
+                    <Text style={styles.text}>{products.rating.rate}</Text>
+                </View>
             </View>
                 
             </View>
