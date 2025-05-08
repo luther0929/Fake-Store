@@ -7,16 +7,21 @@ import { Ionicons } from '@expo/vector-icons';
 import CustomImage from "../components/CustomImage";
 import CustomButton from "../components/CustomButton";
 import LoadingIndicator from "../components/LoadingIndicator";
-
-
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/cartSlice";
 
 export default function ProductScreen() {
+    const dispatch = useDispatch();
     const route = useRoute();
     const { product } = route.params || {};
 
     if (!product) {
        return <LoadingIndicator size={80}/>
     }
+
+    const handleAddToCart = () => {
+        dispatch(addToCart(product));
+    };
 
     return(
         <ScrollView>
@@ -41,7 +46,11 @@ export default function ProductScreen() {
                     </View>
                     
                     <Text style={[styles.text, {fontSize: 24, paddingVertical: 20}]}>${product.price}</Text>
-                    <CustomButton text={'Add to cart'}/>
+
+                    <CustomButton
+                        text={'Add to cart'}
+                        handlePress={handleAddToCart}
+                    />
             
                 </View>
             </View>

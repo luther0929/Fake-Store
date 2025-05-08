@@ -4,51 +4,110 @@ import { NavigationContainer } from '@react-navigation/native';
 import CategoryScreen from './screens/CategoryScreen.js';
 import ProductListScreen from './screens/ProductListScreen.js';
 import ProductScreen from './screens/ProductScreen.js';
+import Cart from './screens/Cart.js';
 import { colors } from './styles/colors.js';
 import { capitalizeEachWord, getFirstThreeWords } from './utils/stringUtils.js';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Ionicons } from '@expo/vector-icons';
+import { Provider } from 'react-redux';
+import store from './redux/store.js';
 
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
-export default function App() {
+function ProductStack() {
+  return(
+    <Stack.Navigator
+      initialRouteName='Category'
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: colors.secondary,
+        },
+        headerTintColor: colors.fontTitle,
+        headerTitleStyle: {
+          fontWeight: 'bold'
+        }
+      }}
+    >
+      <Stack.Screen
+        name='Category'
+        component={CategoryScreen}
+        options={{
+          title: 'Category'
+        }}
+      />
+      <Stack.Screen
+        name='ProductListScreen'
+        component={ProductListScreen}
+        options={({route}) => ({
+          title: route.params?.category ? capitalizeEachWord(route.params.category) : 'Products'
+        })}
+      />
+      <Stack.Screen
+        name='ProductScreen'
+        component={ProductScreen}
+        options={({route}) => ({
+          title: route.params?.product?.title ? getFirstThreeWords(route.params.product.title) : 'Product'
+        })}
+      />
 
-  return (
+    </Stack.Navigator>
+  );
+}
+
+function AppContent() {
+  return(
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName='Category'
+      <Tab.Navigator
         screenOptions={{
           headerStyle: {
-            backgroundColor: colors.secondary
+            backgroundColor: colors.secondary,
           },
           headerTintColor: colors.fontTitle,
           headerTitleStyle: {
             fontWeight: 'bold'
+          },
+          tabBarStyle: {
+            backgroundColor: colors.secondary
           }
         }}
       >
-        <Stack.Screen
-          name='Category'
-          component={CategoryScreen}
+        <Tab.Screen 
+          name='Shop'
+          component={ProductStack}
           options={{
-            title: 'Category'
+            tabBarIcon: ({ focused, color, size }) => (
+              <Ionicons
+                name = {focused ? 'basket' : 'basket-outline'}
+                color = {'white'}
+                size = {size}
+              />
+            ),
+            headerShown: false
           }}
         />
-        <Stack.Screen
-          name='ProductListScreen'
-          component={ProductListScreen}
-          options={({route}) => ({
-            title: route.params?.category ? capitalizeEachWord(route.params.category) : 'Products'
-          })}
+        <Tab.Screen
+          name='Cart'
+          component={Cart}
+          options={{
+            tabBarIcon: ({ focused, color, size }) => (
+              <Ionicons
+                name = {focused ? 'cart' : 'cart-outline'}
+                color = {'white'}
+                size = {size}
+              />
+            )
+          }}
         />
-        <Stack.Screen
-          name='ProductScreen'
-          component={ProductScreen}
-          options={({route}) => ({
-            title: route.params?.product?.title ? getFirstThreeWords(route.params.product.title) : 'Product'
-          })}
-        />
-
-      </Stack.Navigator>
+      </Tab.Navigator>
     </NavigationContainer>
+  );
+}
+export default function App() {
+  return (
+    <Provider store={store}>
+      <AppContent />
+    </Provider>
   );
 }

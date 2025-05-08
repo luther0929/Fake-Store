@@ -6,23 +6,23 @@ import CustomImage from './CustomImage';
 import { getFirstThreeWords } from "../utils/stringUtils";
 import { Ionicons } from '@expo/vector-icons';
 
-export default function ProductCard({products, onPress}) {
+export default function ProductCard({product, onPress}) {
 
     return(
         <Pressable style={[commonStyles.card, { height: 190 }]} onPress={onPress}>
             <View style={styles.imageContainer} >
                 <CustomImage
-                    source={{uri: products.image}}
+                    source={{uri: product.image}}
                     size = {120}
                 />
             </View>
             <View style={styles.textContainer}>
-                <Text style={[styles.text, {fontWeight: 'bold', fontSize: 16}]}>{getFirstThreeWords(products.title)}</Text>
+                <Text style={[styles.text, {fontWeight: 'bold', fontSize: 16}]}>{getFirstThreeWords(product.title)}</Text>
             <View style={{gap: 5}}>
-                <Text style={styles.text}>Price: ${products.price}</Text>
+                <Text style={styles.text}>Price: ${product.price}</Text>
                 <View style={{flexDirection: 'row', alignItems: 'center', gap: 6}}>
                     <Ionicons name="star" size={12} color="white" />
-                    <Text style={styles.text}>{products.rating.rate}</Text>
+                    <Text style={styles.text}>{product.rating.rate}</Text>
                 </View>
             </View>
                 

@@ -3,11 +3,11 @@ import { TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { colors } from '../styles/colors';
 import { spacing } from '../styles/spacing';
 
-export default function CustomButton({text}) {
+export default function CustomButton({text, handlePress}) {
     return(
         <TouchableOpacity
             style={styles.button}
-            onPress={()=>{}}
+            onPress={handlePress}
         >
             <Text style={styles.text}>{text}</Text>
         </TouchableOpacity>

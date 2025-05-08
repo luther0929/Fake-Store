@@ -1,13 +1,16 @@
 import { View, ScrollView, ActivityIndicator } from "react-native";
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { commonStyles } from '../styles/common';
-import useProducts from '../hooks/useProducts'
+import { fetchProducts } from "../redux/productsSlice";
 import { colors } from "../styles/colors";
 import ProductCard from '../components/ProductCard';
 import LoadingIndicator from "../components/LoadingIndicator";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
 export default function ProductListScreen() {
-    const { products, isLoading, error } = useProducts();
+    const dispatch = useDispatch();
+    const { products, isLoading, error } = useSelector(state => state.products);
     const route = useRoute();
     const navigation = useNavigation();
     const { category } = route.params || {};
@@ -16,6 +19,10 @@ export default function ProductListScreen() {
     const handlePress = (product) => {
         navigation.navigate('ProductScreen', {product});
     }
+
+    useEffect(() => {
+        dispatch(fetchProducts());
+    }, [dispatch])
 
     if(isLoading) {
         return(
@@ -31,7 +38,7 @@ export default function ProductListScreen() {
             <View style={commonStyles.list}>
                 {filteredProducts.map((filteredProduct) => {
                     return <ProductCard
-                        products={filteredProduct}
+                        product={filteredProduct}
                         onPress={() => handlePress(filteredProduct)}
                         key={filteredProduct.id}
                     />
