@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     productContainer: {
         width: 280,
         height: 380,
-        margin: spacing.big,
+        margin: spacing.medium,
         padding: spacing.medium,
         justifyContent: 'center',
         alignItems: 'center',

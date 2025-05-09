@@ -5,6 +5,7 @@ import { commonStyles } from "../styles/common";
 import CartProductCard from "../components/CartProductCard";
 import { spacing } from "../styles/spacing";
 import { StyleSheet } from "react-native";
+import { colors } from "../styles/colors";
 
 export default function Cart() {
     const dispatch = useDispatch();
@@ -19,7 +20,7 @@ export default function Cart() {
     }
 
     const renderHeader = () => (
-        <View style={{margin: spacing.medium}}>
+        <View style={styles.headerContainer}>
             <Text style={styles.text}>Total Price: ${totalPrice}</Text>
             <Text style={styles.text}>Total Quantity: {totalQuantity}</Text>
         </View>
@@ -48,8 +49,16 @@ const styles = StyleSheet.create({
     text: {
         margin: spacing.small,
         flexWrap: 'wrap',
-        color: 'black',
+        color: 'white',
         textAlign: 'center',
         fontSize: spacing.medium,
+    },
+    headerContainer: {
+        width: 280,
+        margin: spacing.medium,
+        padding: spacing.small,
+        backgroundColor: colors.secondary,
+        borderRadius: spacing.medium,
+        alignSelf: 'center'
     }
 })
