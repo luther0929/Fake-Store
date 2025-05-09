@@ -7,20 +7,20 @@ import { Ionicons } from '@expo/vector-icons';
 import CustomImage from "../components/CustomImage";
 import CustomButton from "../components/CustomButton";
 import LoadingIndicator from "../components/LoadingIndicator";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../redux/cartSlice";
 
 export default function ProductScreen() {
     const dispatch = useDispatch();
     const route = useRoute();
-    const { product } = route.params || {};
+    const { selectedProduct } = useSelector(state => state.products);
 
-    if (!product) {
+    if (!selectedProduct) {
        return <LoadingIndicator size={80}/>
     }
 
     const handleAddToCart = () => {
-        dispatch(addToCart(product));
+        dispatch(addToCart(selectedProduct));
     };
 
     return(
@@ -28,24 +28,24 @@ export default function ProductScreen() {
             <View style={[commonStyles.container, {paddingHorizontal:0, backgroundColor: "white"}]}>
                 <View style={styles.imageContainer}>
                     <CustomImage
-                        source={{uri: product.image}}
+                        source={{uri: selectedProduct.image}}
                         size={200}
                     />
                 </View>
                 <View style={[styles.textContainer, {borderRadius: 30}]}>
                     <View>
-                        <Text style={[styles.text, {fontWeight: 'bold', fontSize: 18}]}>{product.title}</Text>
+                        <Text style={[styles.text, {fontWeight: 'bold', fontSize: 18}]}>{selectedProduct.title}</Text>
                         <View style={{paddingVertical: 10, flexDirection: 'row', alignItems: 'center', gap: 4}}>
                         <Ionicons name="star" size={16} color="white" />
-                            <Text style={[styles.text, {fontSize: 16}]}>{product.rating.rate}</Text>
+                            <Text style={[styles.text, {fontSize: 16}]}>{selectedProduct.rating.rate}</Text>
                         </View>
                     </View>
                     <View style={{gap:5, paddingVertical: 25}}>
                         <Text style={[styles.text, {fontWeight:'bold'}]}>Description</Text>
-                        <Text style={styles.text}>{product.description}</Text>
+                        <Text style={styles.text}>{selectedProduct.description}</Text>
                     </View>
                     
-                    <Text style={[styles.text, {fontSize: 24, paddingVertical: 20}]}>${product.price}</Text>
+                    <Text style={[styles.text, {fontSize: 24, paddingVertical: 20}]}>${selectedProduct.price}</Text>
 
                     <CustomButton
                         text={'Add to cart'}

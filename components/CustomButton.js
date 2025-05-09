@@ -3,10 +3,10 @@ import { TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { colors } from '../styles/colors';
 import { spacing } from '../styles/spacing';
 
-export default function CustomButton({text, handlePress}) {
+export default function CustomButton({text, handlePress, color, width}) {
     return(
         <TouchableOpacity
-            style={styles.button}
+            style={[styles.button, { backgroundColor: color ? color : colors.primary, width: width ? width : 120 }]}
             onPress={handlePress}
         >
             <Text style={styles.text}>{text}</Text>
@@ -16,7 +16,6 @@ export default function CustomButton({text, handlePress}) {
 
 const styles = StyleSheet.create({
     button: {
-        width: 120,
         justifyContent: 'center',
         alignItems: 'center',
         padding: spacing.medium,

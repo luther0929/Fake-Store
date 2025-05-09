@@ -9,7 +9,7 @@ import { colors } from './styles/colors.js';
 import { capitalizeEachWord, getFirstThreeWords } from './utils/stringUtils.js';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from '@expo/vector-icons';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import store from './redux/store.js';
 
 
@@ -57,6 +57,9 @@ function ProductStack() {
 }
 
 function AppContent() {
+  
+  const { totalQuantity } = useSelector(state => state.cart)
+
   return(
     <NavigationContainer>
       <Tab.Navigator
@@ -97,7 +100,8 @@ function AppContent() {
                 color = {'white'}
                 size = {size}
               />
-            )
+            ),
+            tabBarBadge: totalQuantity > 0 ? totalQuantity : null
           }}
         />
       </Tab.Navigator>

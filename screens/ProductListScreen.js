@@ -1,7 +1,7 @@
 import { View, ScrollView, ActivityIndicator } from "react-native";
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { commonStyles } from '../styles/common';
-import { fetchProducts } from "../redux/productsSlice";
+import { fetchProducts, setSelectedProduct } from "../redux/productsSlice";
 import { colors } from "../styles/colors";
 import ProductCard from '../components/ProductCard';
 import LoadingIndicator from "../components/LoadingIndicator";
@@ -10,14 +10,12 @@ import { useEffect } from "react";
 
 export default function ProductListScreen() {
     const dispatch = useDispatch();
-    const { products, isLoading, error } = useSelector(state => state.products);
-    const route = useRoute();
+    const { filteredProducts, isLoading, error,  } = useSelector(state => state.products);
     const navigation = useNavigation();
-    const { category } = route.params || {};
-    const filteredProducts = products.filter(product => category === product.category);
 
     const handlePress = (product) => {
-        navigation.navigate('ProductScreen', {product});
+        dispatch(setSelectedProduct(product))
+        navigation.navigate('ProductScreen');
     }
 
     useEffect(() => {

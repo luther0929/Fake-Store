@@ -15,7 +15,7 @@ export default function CategoryScreen() {
     const navigation = useNavigation();
     const handlePress = (category) => {
         dispatch(filterByCategory(category));
-        navigation.navigate('ProductListScreen', {category});
+        navigation.navigate('ProductListScreen');
     };
 
     useEffect(() => {
