@@ -1,9 +1,5 @@
-// Complete authService.js file
-
-// Use your computer's actual IP address for physical devices
 const API_URL = 'http://192.168.1.104:3000';
 
-// API endpoints according to the documentation
 const API_ENDPOINTS = {
   SIGNUP: '/users/signup',
   SIGNIN: '/users/signin',
