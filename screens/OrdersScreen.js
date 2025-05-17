@@ -1,4 +1,4 @@
-// OrdersScreen.js - Updated to show empty categories
+// OrdersScreen.js - Complete file with default collapsed categories
 
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
@@ -22,11 +22,11 @@ export default function OrdersScreen() {
   
   // Track expanded order items
   const [expandedOrders, setExpandedOrders] = useState({});
-  // Track expanded categories
+  // Track expanded categories - all collapsed by default
   const [expandedCategories, setExpandedCategories] = useState({
-    'New Orders': true,
-    'Paid Orders': true,
-    'Delivered Orders': true
+    'New Orders': false,
+    'Paid Orders': false,
+    'Delivered Orders': false
   });
   
   // Use useFocusEffect to refresh orders when screen comes into focus
