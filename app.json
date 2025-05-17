@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "Fake_Store",
-    "slug": "Fake_Store",
+    "name": "Fake Store",
+    "slug": "Fake Store",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon-new.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {

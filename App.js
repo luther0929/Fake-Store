@@ -6,6 +6,7 @@ import CategoryScreen from './screens/CategoryScreen.js';
 import ProductListScreen from './screens/ProductListScreen.js';
 import ProductScreen from './screens/ProductScreen.js';
 import Cart from './screens/Cart.js';
+import OrdersScreen from './screens/OrdersScreen.js';
 import UserProfileScreen from './screens/UserProfileScreen.js';
 import SignInScreen from './screens/SignInScreen.js';
 import SignUpScreen from './screens/SignUpScreen.js';
@@ -17,14 +18,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { Provider, useSelector, useDispatch } from 'react-redux';
 import store from './redux/store.js';
 import { fetchCart } from './redux/cartSlice.js';
+import { fetchProducts } from './redux/productsSlice.js';
+import { fetchOrders } from './redux/ordersSlice.js';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const AuthStack = createNativeStackNavigator();
+const ProductsStack = createNativeStackNavigator();
 
 function ProductStack() {
   return(
-    <Stack.Navigator
+    <ProductsStack.Navigator
       initialRouteName='Category'
       screenOptions={{
         headerStyle: {
@@ -36,28 +40,28 @@ function ProductStack() {
         }
       }}
     >
-      <Stack.Screen
+      <ProductsStack.Screen
         name='Category'
         component={CategoryScreen}
         options={{
           title: 'Category'
         }}
       />
-      <Stack.Screen
+      <ProductsStack.Screen
         name='ProductListScreen'
         component={ProductListScreen}
         options={({route}) => ({
           title: route.params?.category ? capitalizeEachWord(route.params.category) : 'Products'
         })}
       />
-      <Stack.Screen
+      <ProductsStack.Screen
         name='ProductScreen'
         component={ProductScreen}
         options={({route}) => ({
           title: route.params?.product?.title ? getFirstThreeWords(route.params.product.title) : 'Product'
         })}
       />
-    </Stack.Navigator>
+    </ProductsStack.Navigator>
   );
 }
 
@@ -90,23 +94,53 @@ function AuthStackNavigator() {
 
 function MainTabNavigator() {
   const { totalQuantity } = useSelector(state => state.cart);
-  const { token } = useSelector(state => state.auth);
+  const { newOrdersCount } = useSelector(state => state.orders);
+  const { isAuthenticated, token } = useSelector(state => state.auth);
   const dispatch = useDispatch();
   
-  // Load user's cart when they access the main app
+  // Pre-fetch products to avoid delays later
   useEffect(() => {
-    if (token) {
-      dispatch(fetchCart(token))
-        .unwrap()
-        .catch(error => {
-          console.error('Error loading cart:', error);
-          // Don't show alert on initial load to avoid bad UX
-        });
+    if (isAuthenticated) {
+      dispatch(fetchProducts());
     }
-  }, [dispatch, token]);
+  }, [dispatch, isAuthenticated]);
+  
+  // Load user's cart and orders when a valid token is available
+  useEffect(() => {
+    // Only fetch data if we have a valid token
+    if (isAuthenticated && token) {
+      console.log('Fetching user data with token:', token);
+      // Add a small delay to ensure token is fully processed
+      const timer = setTimeout(() => {
+        dispatch(fetchCart(token))
+          .unwrap()
+          .catch(error => {
+            console.error('Error loading cart:', error);
+          });
+        
+        dispatch(fetchOrders(token))
+          .unwrap()
+          .catch(error => {
+            console.error('Error loading orders:', error);
+          });
+      }, 500); // 500ms delay to ensure token is ready
+      
+      return () => clearTimeout(timer);
+    }
+  }, [dispatch, isAuthenticated, token]);
+
+  // Handle tab press when not authenticated
+  const handleTabPress = (e) => {
+    if (!isAuthenticated) {
+      // Prevent navigation and show alert
+      e.preventDefault();
+      Alert.alert('Authentication Required', 'Please sign in to access this feature.');
+    }
+  };
   
   return(
     <Tab.Navigator
+      initialRouteName="Profile" // Start with Profile tab
       screenOptions={{
         headerStyle: {
           backgroundColor: colors.secondary,
@@ -126,13 +160,23 @@ function MainTabNavigator() {
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons
-              name = {focused ? 'basket' : 'basket-outline'}
-              color = {'white'}
-              size = {size}
+              name={focused ? 'basket' : 'basket-outline'}
+              color={isAuthenticated ? 'white' : 'gray'} // Grey out if not authenticated
+              size={size}
             />
           ),
-          headerShown: false
+          headerShown: false,
+          tabBarActiveTintColor: isAuthenticated ? 'white' : 'gray',
+          tabBarInactiveTintColor: 'gray',
         }}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            if (!isAuthenticated) {
+              e.preventDefault();
+              Alert.alert('Authentication Required', 'Please sign in to access the shop.');
+            }
+          },
+        })}
       />
       <Tab.Screen
         name='Cart'
@@ -140,25 +184,60 @@ function MainTabNavigator() {
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons
-              name = {focused ? 'cart' : 'cart-outline'}
-              color = {'white'}
-              size = {size}
+              name={focused ? 'cart' : 'cart-outline'}
+              color={isAuthenticated ? 'white' : 'gray'} // Grey out if not authenticated
+              size={size}
             />
           ),
-          tabBarBadge: totalQuantity > 0 ? totalQuantity : null
+          tabBarBadge: isAuthenticated && totalQuantity > 0 ? totalQuantity : null,
+          tabBarActiveTintColor: isAuthenticated ? 'white' : 'gray',
+          tabBarInactiveTintColor: 'gray',
         }}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            if (!isAuthenticated) {
+              e.preventDefault();
+              Alert.alert('Authentication Required', 'Please sign in to access your cart.');
+            }
+          },
+        })}
       />
       <Tab.Screen
-        name='Profile'
-        component={UserProfileScreen}
+        name='Orders'
+        component={OrdersScreen}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons
-              name = {focused ? 'person' : 'person-outline'}
-              color = {'white'}
-              size = {size}
+              name={focused ? 'list' : 'list-outline'}
+              color={isAuthenticated ? 'white' : 'gray'} // Grey out if not authenticated
+              size={size}
             />
-          )
+          ),
+          tabBarBadge: isAuthenticated && newOrdersCount > 0 ? newOrdersCount : null,
+          tabBarActiveTintColor: isAuthenticated ? 'white' : 'gray',
+          tabBarInactiveTintColor: 'gray',
+        }}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            if (!isAuthenticated) {
+              e.preventDefault();
+              Alert.alert('Authentication Required', 'Please sign in to access your orders.');
+            }
+          },
+        })}
+      />
+      <Tab.Screen
+        name='Profile'
+        component={isAuthenticated ? UserProfileScreen : AuthStackNavigator}
+        options={{
+          tabBarIcon: ({ focused, color, size }) => (
+            <Ionicons
+              name={focused ? 'person' : 'person-outline'}
+              color={'white'} // Always white since this tab is always accessible
+              size={size}
+            />
+          ),
+          headerShown: isAuthenticated, // Only show profile header when authenticated
         }}
       />
     </Tab.Navigator>
@@ -167,7 +246,6 @@ function MainTabNavigator() {
 
 function AppContent() {
   const [isSplashVisible, setIsSplashVisible] = useState(true);
-  const { isAuthenticated } = useSelector(state => state.auth);
   
   if (isSplashVisible) {
     return <ManualSplashScreen onFinish={() => setIsSplashVisible(false)} />;
@@ -175,19 +253,7 @@ function AppContent() {
 
   return(
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {!isAuthenticated ? (
-          <Stack.Screen 
-            name="Auth" 
-            component={AuthStackNavigator}
-          />
-        ) : (
-          <Stack.Screen 
-            name="Main" 
-            component={MainTabNavigator}
-          />
-        )}
-      </Stack.Navigator>
+      <MainTabNavigator />
     </NavigationContainer>
   );
 }

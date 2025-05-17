@@ -1,3 +1,5 @@
+// Complete authService.js file
+
 // Use your computer's actual IP address for physical devices
 const API_URL = 'http://192.168.1.104:3000';
 
@@ -252,7 +254,7 @@ export const authService = {
         },
         body: JSON.stringify({
           items: items.map(item => ({
-            prodID: item.id,
+            prodID: item.prodID || item.id,
             price: item.price,
             quantity: item.quantity
           }))
@@ -277,7 +279,7 @@ export const authService = {
   // Update order status
   updateOrder: async (token, orderId, isPaid, isDelivered) => {
     try {
-      console.log('Updating order status:', { orderId, isPaid, isDelivered });
+      console.log('Updating order status:', { orderID: orderId, isPaid, isDelivered });
       console.log('API URL:', `${API_URL}${API_ENDPOINTS.ORDERS}/updateorder`);
       
       const response = await fetch(`${API_URL}${API_ENDPOINTS.ORDERS}/updateorder`, {
@@ -296,10 +298,6 @@ export const authService = {
       console.log('Update order response status:', response.status);
       const data = await response.json();
       console.log('Update order response data:', data);
-      
-      if (data.status !== 'OK') {
-        throw new Error(data.message || 'Failed to update order');
-      }
       
       return data;
     } catch (error) {

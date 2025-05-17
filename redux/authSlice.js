@@ -8,6 +8,7 @@ export const signIn = createAsyncThunk(
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const response = await authService.signIn(email, password);
+      console.log("Sign in response:", response);
       return response;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -20,6 +21,7 @@ export const signUp = createAsyncThunk(
   async ({ name, email, password }, { rejectWithValue }) => {
     try {
       const response = await authService.signUp(name, email, password);
+      console.log("Sign up response:", response);
       return response;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -112,6 +114,7 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isAuthenticated = true;
+        console.log("Auth state updated with token:", action.payload.token);
       })
       .addCase(signIn.rejected, (state, action) => {
         state.isLoading = false;
@@ -128,6 +131,7 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         state.isAuthenticated = true;
+        console.log("Auth state updated with token after signup:", action.payload.token);
       })
       .addCase(signUp.rejected, (state, action) => {
         state.isLoading = false;

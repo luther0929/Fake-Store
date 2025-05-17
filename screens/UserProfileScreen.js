@@ -64,19 +64,14 @@ export default function UserProfileScreen() {
   };
 
   const handleSignOut = () => {
-    // Use the new signOutAndClearData thunk to clear cart data as well
+    // Use the signOutAndClearData thunk to clear cart data as well
     dispatch(signOutAndClearData())
       .unwrap()
-      .then(() => {
-        // Navigate to auth
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Auth' }],
-        });
-      })
       .catch(error => {
         console.error('Sign out error:', error);
       });
+    
+    // No navigation reset - the app will automatically respond to the auth state change
   };
 
   if (!user) {
