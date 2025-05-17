@@ -4,14 +4,17 @@
     "slug": "Fake_Store",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon-new.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#333333"
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "sdkVersion": "53.0.0",
     "ios": {
       "supportsTablet": true
@@ -19,12 +22,21 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#333333"
       },
-      "package": "com.anonymous.Fake_Store"
+      "package": "com.anonymous.Fake_Store",
+      "permissions": ["INTERNET"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     }
-  }
+  },
+  "android": {
+  "adaptiveIcon": {
+    "foregroundImage": "./assets/adaptive-icon.png",
+    "backgroundColor": "#333333"
+  },
+  "package": "com.anonymous.Fake_Store",
+  "permissions": ["INTERNET"]
+}
 }

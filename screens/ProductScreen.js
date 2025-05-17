@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, ScrollView} from "react-native";
+import { View, Text, StyleSheet, ScrollView, Alert } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { commonStyles } from "../styles/common";
 import { colors } from "../styles/colors";
@@ -14,6 +14,7 @@ export default function ProductScreen() {
     const dispatch = useDispatch();
     const route = useRoute();
     const { selectedProduct } = useSelector(state => state.products);
+    const { token } = useSelector(state => state.auth);
 
     if (!selectedProduct) {
        return <LoadingIndicator size={80}/>
@@ -21,6 +22,9 @@ export default function ProductScreen() {
 
     const handleAddToCart = () => {
         dispatch(addToCart(selectedProduct));
+        
+        // Show confirmation to user
+        Alert.alert('Success', 'Item added to cart');
     };
 
     return(
@@ -77,4 +81,4 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'justify'
     }
-})
+});

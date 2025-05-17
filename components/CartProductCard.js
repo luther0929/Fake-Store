@@ -5,21 +5,41 @@ import { colors } from '../styles/colors';
 import { spacing } from '../styles/spacing';
 import { commonStyles } from '../styles/common';
 import CustomImage from './CustomImage';
-import { Ionicons } from '@expo/vector-icons';
 import { getFirstThreeWords } from '../utils/stringUtils';
 
 export default function CartProductCard({item, onAddToCart, onRemoveFromCart}) {
+    // Add defensive check for item
+    if (!item) {
+        return (
+            <View style={styles.productContainer}>
+                <Text style={[styles.text, {color: 'red'}]}>Invalid cart item</Text>
+            </View>
+        );
+    }
+    
+    // Make sure item has all required properties
+    const title = item.title ? getFirstThreeWords(item.title) : 'Product';
+    const price = item.price || 0;
+    const quantity = item.quantity || 0;
+    const image = item.image || '';
+    
     return(
         <View style={styles.productContainer} key={item.id}>
             <View style={styles.imageContainer} >
-                <CustomImage
-                    source={{uri: item.image}}
-                    size = {120}
-                />
+                {image ? (
+                    <CustomImage
+                        source={{uri: image}}
+                        size={120}
+                    />
+                ) : (
+                    <View style={{width: 120, height: 120, backgroundColor: '#f0f0f0', justifyContent: 'center', alignItems: 'center'}}>
+                        <Text>No Image</Text>
+                    </View>
+                )}
             </View>
             <View style={styles.textContainer}>
-                <Text style={[styles.text, {fontWeight: 'bold', fontSize: 16}]}>{getFirstThreeWords(item.title)}</Text>
-                <Text style={styles.text}>Price: ${item.price}</Text>
+                <Text style={[styles.text, {fontWeight: 'bold', fontSize: 16}]}>{title}</Text>
+                <Text style={styles.text}>Price: ${price}</Text>
             </View>
             <View style={{marginVertical: 20, flexDirection: 'row', alignItems: 'center', gap: 30}}>
                 <CustomButton 
@@ -28,7 +48,7 @@ export default function CartProductCard({item, onAddToCart, onRemoveFromCart}) {
                     color='white'
                     width={60}
                 />
-                <Text style={styles.text}>Qty {item.quantity}</Text>
+                <Text style={styles.text}>Qty {quantity}</Text>
                 <CustomButton 
                     text='+'
                     handlePress={() => onAddToCart(item)}
